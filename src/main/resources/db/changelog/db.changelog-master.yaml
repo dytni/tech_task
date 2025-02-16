@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changes/create-hotels.yaml
+  - include:
+      file: db/changelog/changes/insert-hotels.yaml

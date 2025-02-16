@@ -1,0 +1,73 @@
+databaseChangeLog:
+  - changeSet:
+      id: insert-hotels
+      author: dytni
+      changes:
+        - sql:
+            sql: |
+              INSERT INTO hotel (name, description, brand, phone, email, check_in, check_out, house_number, street, city, county, post_code) 
+              VALUES ('DoubleTree by Hilton Minsk', 
+                      'The DoubleTree by Hilton Hotel Minsk offers 193 luxurious rooms in the Belorussian capital and stunning views of Minsk city from the hotel''s 20th floor ...', 
+                      'Hilton', 
+                      '+375 17 309-80-00', 
+                      'doubletreeminsk.info@hilton.com', 
+                      '14:00', 
+                      '12:00', 
+                      9, 
+                      'Pobediteley Avenue', 
+                      'Minsk', 
+                      'Belarus', 
+                      '220004');
+
+              INSERT INTO hotel (name, description, brand, phone, email, check_in, check_out, house_number, street, city, county, post_code) 
+              VALUES ('Radisson Royal Hotel Minsk', 
+                      'Experience luxury and comfort at the Radisson Royal Hotel Minsk, offering modern rooms and excellent service.', 
+                      'Radisson', 
+                      '+375 17 287-90-00', 
+                      'radissonminsk.info@radisson.com', 
+                      '14:00', 
+                      '12:00', 
+                      15, 
+                      'Independence Avenue', 
+                      'Minsk', 
+                      'Belarus', 
+                      '220000');
+
+              INSERT INTO hotel (name, description, brand, phone, email, check_in, check_out, house_number, street, city, county, post_code) 
+              VALUES ('Belmond Grand Hotel Europe', 
+                      'Belmond Grand Hotel Europe is a historic luxury hotel located in the heart of Minsk.', 
+                      'Belmond', 
+                      '+375 17 200-10-00', 
+                      'belmondminsk.info@belmond.com', 
+                      '14:00', 
+                      '12:00', 
+                      1, 
+                      'Boulevard Pobediteley', 
+                      'Minsk', 
+                      'Belarus', 
+                      '220001');
+
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (1, 'Free parking');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (1, 'Free WiFi');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (1, 'Non-smoking rooms');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (1, 'Concierge');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (1, 'On-site restaurant');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (1, 'Fitness center');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (1, 'Pet-friendly rooms');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (1, 'Room service');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (1, 'Business center');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (1, 'Meeting rooms');
+
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (2, 'Free parking');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (2, 'Free WiFi');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (2, 'Spa services');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (2, 'On-site restaurant');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (2, 'Business center');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (2, 'Meeting rooms');
+
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (3, 'Free parking');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (3, 'Free WiFi');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (3, 'Spa services');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (3, 'On-site restaurant');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (3, 'Business center');
+              INSERT INTO hotel_amenities (hotel_id, amenity) VALUES (3, 'Meeting rooms');
