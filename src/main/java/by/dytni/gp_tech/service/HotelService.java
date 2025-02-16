@@ -51,25 +51,20 @@ public class HotelService {
     }
 
     public Map<String, Long> getHistogram(String param) {
-        switch (param) {
-            case "brand":
-                return hotelRepository.findAll().stream()
-                        .collect(Collectors.groupingBy(Hotel::getBrand, Collectors.counting()));
-            case "city":
-                return hotelRepository.findAll().stream()
-                        .map(Hotel::getAddress)
-                        .collect(Collectors.groupingBy(Address::getCity, Collectors.counting()));
-            case "county":
-                return hotelRepository.findAll().stream()
-                        .map(Hotel::getAddress)
-                        .collect(Collectors.groupingBy(Address::getCounty, Collectors.counting()));
-            case "amenities":
-                return hotelRepository.findAll().stream()
-                        .flatMap(hotel -> hotel.getAmenities().stream())
-                        .collect(Collectors.groupingBy(amenity -> amenity, Collectors.counting()));
-            default:
-                throw new IllegalArgumentException("Invalid parameter for histogram");
-        }
+        return switch (param) {
+            case "brand" -> hotelRepository.findAll().stream()
+                    .collect(Collectors.groupingBy(Hotel::getBrand, Collectors.counting()));
+            case "city" -> hotelRepository.findAll().stream()
+                    .map(Hotel::getAddress)
+                    .collect(Collectors.groupingBy(Address::getCity, Collectors.counting()));
+            case "county" -> hotelRepository.findAll().stream()
+                    .map(Hotel::getAddress)
+                    .collect(Collectors.groupingBy(Address::getCounty, Collectors.counting()));
+            case "amenities" -> hotelRepository.findAll().stream()
+                    .flatMap(hotel -> hotel.getAmenities().stream())
+                    .collect(Collectors.groupingBy(amenity -> amenity, Collectors.counting()));
+            default -> throw new IllegalArgumentException("Invalid parameter for histogram");
+        };
     }
 
     public HotelShortDTO toHotelShortInfoDTO(Hotel hotel) {
