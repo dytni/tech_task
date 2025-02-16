@@ -32,7 +32,7 @@ public class HistogramController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the histogram data",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(type = "integer")) }),
+                            schema = @Schema(type = "object")) }),
             @ApiResponse(responseCode = "400", description = "Invalid parameter",
                     content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error",

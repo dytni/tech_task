@@ -1,6 +1,7 @@
 package by.dytni.gp_tech.controller;
 
 import by.dytni.gp_tech.dto.HotelDTO;
+import by.dytni.gp_tech.dto.HotelShortDTO;
 import by.dytni.gp_tech.model.Hotel;
 import by.dytni.gp_tech.service.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/property-view")
 @RequiredArgsConstructor
-@Tag(name = "Hotel Management", description = "Controller for managing hotels")
+@Tag(name = "Hotel Management", description = "API for managing hotels")
 public class HotelController {
 
     private final HotelService hotelService;
@@ -32,13 +33,13 @@ public class HotelController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the list of hotels",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = HotelDTO.class)) }),
+                            schema = @Schema(implementation = HotelShortDTO.class)) }),
             @ApiResponse(responseCode = "404", description = "Hotels not found",
                     content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content)
     })
-    public List<HotelDTO> getAllHotels() {
+    public List<HotelShortDTO> getAllHotels() {
         return hotelService.getAllHotels();
     }
 
@@ -47,13 +48,13 @@ public class HotelController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the hotel",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Hotel.class)) }),
+                            schema = @Schema(implementation = HotelDTO.class)) }),
             @ApiResponse(responseCode = "404", description = "Hotel not found",
                     content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content)
     })
-    public ResponseEntity<Hotel> getHotelById(@PathVariable Long id) {
+    public ResponseEntity<HotelDTO> getHotelById(@PathVariable Long id) {
         return hotelService.getHotelById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -70,9 +71,10 @@ public class HotelController {
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content)
     })
-    public ResponseEntity<Hotel> createHotel(@RequestBody Hotel hotel) {
+    public ResponseEntity<HotelDTO> createHotel(@RequestBody Hotel hotel) {
         Hotel createdHotel = hotelService.createHotel(hotel);
-        return ResponseEntity.ok(createdHotel);
+        HotelDTO hotelDTO = hotelService.toHotelDTO(createdHotel);
+        return ResponseEntity.ok(hotelDTO);
     }
 
     @PostMapping("/hotels/{id}/amenities")
@@ -80,7 +82,7 @@ public class HotelController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Amenities added successfully",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Hotel.class)) }),
+                            schema = @Schema(implementation = HotelDTO.class)) }),
             @ApiResponse(responseCode = "400", description = "Invalid input",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Hotel not found",
@@ -88,9 +90,10 @@ public class HotelController {
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content)
     })
-    public ResponseEntity<Hotel> addAmenities(@PathVariable Long id, @RequestBody List<String> amenities) {
+    public ResponseEntity<HotelDTO> addAmenities(@PathVariable Long id, @RequestBody List<String> amenities) {
         Hotel updatedHotel = hotelService.addAmenities(id, amenities);
-        return ResponseEntity.ok(updatedHotel);
+        HotelDTO hotelDTO = hotelService.toHotelDTO(updatedHotel);
+        return ResponseEntity.ok(hotelDTO);
     }
 
     @GetMapping("/search")
@@ -105,13 +108,13 @@ public class HotelController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the list of hotels",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = HotelDTO.class)) }),
+                            schema = @Schema(implementation = HotelShortDTO.class)) }),
             @ApiResponse(responseCode = "404", description = "Hotels not found",
                     content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content)
     })
-    public List<HotelDTO> searchHotels(
+    public List<HotelShortDTO> searchHotels(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) String city,

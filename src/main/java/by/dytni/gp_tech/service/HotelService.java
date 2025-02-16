@@ -1,8 +1,9 @@
 package by.dytni.gp_tech.service;
 
 import by.dytni.gp_tech.dto.HotelDTO;
-import by.dytni.gp_tech.model.Hotel;
+import by.dytni.gp_tech.dto.HotelShortDTO;
 import by.dytni.gp_tech.model.Address;
+import by.dytni.gp_tech.model.Hotel;
 import by.dytni.gp_tech.repository.HotelRepository;
 import by.dytni.gp_tech.specification.HotelSpecification;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +22,14 @@ public class HotelService {
 
     private final HotelRepository hotelRepository;
 
-    public List<HotelDTO> getAllHotels() {
+    public List<HotelShortDTO> getAllHotels() {
         return hotelRepository.findAll().stream()
                 .map(this::toHotelShortInfoDTO)
                 .collect(Collectors.toList());
     }
 
-    public Optional<Hotel> getHotelById(Long id) {
-        return hotelRepository.findById(id);
+    public Optional<HotelDTO> getHotelById(Long id) {
+        return hotelRepository.findById(id).map(this::toHotelDTO);
     }
 
     public List<Hotel> searchHotels(String name, String brand, String city, String county, List<String> amenities) {
@@ -50,29 +51,46 @@ public class HotelService {
     }
 
     public Map<String, Long> getHistogram(String param) {
-        return switch (param) {
-            case "brand" -> hotelRepository.findAll().stream()
-                    .collect(Collectors.groupingBy(Hotel::getBrand, Collectors.counting()));
-            case "city" -> hotelRepository.findAll().stream()
-                    .map(Hotel::getAddress)
-                    .collect(Collectors.groupingBy(Address::getCity, Collectors.counting()));
-            case "county" -> hotelRepository.findAll().stream()
-                    .map(Hotel::getAddress)
-                    .collect(Collectors.groupingBy(Address::getCounty, Collectors.counting()));
-            case "amenities" -> hotelRepository.findAll().stream()
-                    .flatMap(hotel -> hotel.getAmenities().stream())
-                    .collect(Collectors.groupingBy(amenity -> amenity, Collectors.counting()));
-            default -> throw new IllegalArgumentException("Invalid parameter for histogram");
-        };
+        switch (param) {
+            case "brand":
+                return hotelRepository.findAll().stream()
+                        .collect(Collectors.groupingBy(Hotel::getBrand, Collectors.counting()));
+            case "city":
+                return hotelRepository.findAll().stream()
+                        .map(Hotel::getAddress)
+                        .collect(Collectors.groupingBy(Address::getCity, Collectors.counting()));
+            case "county":
+                return hotelRepository.findAll().stream()
+                        .map(Hotel::getAddress)
+                        .collect(Collectors.groupingBy(Address::getCounty, Collectors.counting()));
+            case "amenities":
+                return hotelRepository.findAll().stream()
+                        .flatMap(hotel -> hotel.getAmenities().stream())
+                        .collect(Collectors.groupingBy(amenity -> amenity, Collectors.counting()));
+            default:
+                throw new IllegalArgumentException("Invalid parameter for histogram");
+        }
     }
 
-    public HotelDTO toHotelShortInfoDTO(Hotel hotel) {
-        HotelDTO dto = new HotelDTO();
+    public HotelShortDTO toHotelShortInfoDTO(Hotel hotel) {
+        HotelShortDTO dto = new HotelShortDTO();
         dto.setId(hotel.getId());
         dto.setName(hotel.getName());
         dto.setDescription(hotel.getDescription());
         dto.setAddress(formatAddress(hotel.getAddress()));
         dto.setPhone(hotel.getPhone());
+        return dto;
+    }
+
+    public HotelDTO toHotelDTO(Hotel hotel) {
+        HotelDTO dto = new HotelDTO();
+        dto.setId(hotel.getId());
+        dto.setName(hotel.getName());
+        dto.setBrand(hotel.getBrand());
+        dto.setAddress(toAddressDTO(hotel.getAddress()));
+        dto.setContacts(toContactsDTO(hotel));
+        dto.setArrivalTime(toArrivalTimeDTO(hotel));
+        dto.setAmenities(hotel.getAmenities());
         return dto;
     }
 
@@ -83,5 +101,29 @@ public class HotelService {
                 address.getCity(),
                 address.getPostCode(),
                 address.getCounty());
+    }
+
+    private HotelDTO.AddressDTO toAddressDTO(Address address) {
+        HotelDTO.AddressDTO dto = new HotelDTO.AddressDTO();
+        dto.setHouseNumber(address.getHouseNumber());
+        dto.setStreet(address.getStreet());
+        dto.setCity(address.getCity());
+        dto.setCounty(address.getCounty());
+        dto.setPostCode(address.getPostCode());
+        return dto;
+    }
+
+    private HotelDTO.ContactsDTO toContactsDTO(Hotel hotel) {
+        HotelDTO.ContactsDTO dto = new HotelDTO.ContactsDTO();
+        dto.setPhone(hotel.getPhone());
+        dto.setEmail(hotel.getEmail());
+        return dto;
+    }
+
+    private HotelDTO.ArrivalTimeDTO toArrivalTimeDTO(Hotel hotel) {
+        HotelDTO.ArrivalTimeDTO dto = new HotelDTO.ArrivalTimeDTO();
+        dto.setCheckIn(hotel.getCheckIn());
+        dto.setCheckOut(hotel.getCheckOut());
+        return dto;
     }
 }
