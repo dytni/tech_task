@@ -1,7 +1,7 @@
 package by.dytni.gp_tech.controller;
 
 import by.dytni.gp_tech.dto.HotelDTO;
-import by.dytni.gp_tech.dto.HotelShortDTO;
+import by.dytni.gp_tech.dto.HotelShortInfoDTO;
 import by.dytni.gp_tech.model.Hotel;
 import by.dytni.gp_tech.service.HotelService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,13 +33,13 @@ public class HotelController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the list of hotels",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = HotelShortDTO.class)) }),
+                            schema = @Schema(implementation = HotelShortInfoDTO.class)) }),
             @ApiResponse(responseCode = "404", description = "Hotels not found",
                     content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content)
     })
-    public List<HotelShortDTO> getAllHotels() {
+    public List<HotelShortInfoDTO> getAllHotels() {
         return hotelService.getAllHotels();
     }
 
@@ -71,9 +71,10 @@ public class HotelController {
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content)
     })
-    public ResponseEntity<HotelShortDTO> createHotel(@RequestBody Hotel hotel) {
+    public ResponseEntity<HotelShortInfoDTO> createHotel(@RequestBody Hotel hotel) {
         Hotel createdHotel = hotelService.createHotel(hotel);
-        HotelShortDTO hotelDTO = hotelService.toHotelShortInfoDTO(createdHotel);
+        HotelShortInfoDTO hotelDTO = hotelService.toHotelShortInfoDTO(createdHotel);
+   
         return ResponseEntity.ok(hotelDTO);
     }
 
@@ -108,13 +109,13 @@ public class HotelController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Found the list of hotels",
                     content = { @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = HotelShortDTO.class)) }),
+                            schema = @Schema(implementation = HotelShortInfoDTO.class)) }),
             @ApiResponse(responseCode = "404", description = "Hotels not found",
                     content = @Content),
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content)
     })
-    public List<HotelShortDTO> searchHotels(
+    public List<HotelShortInfoDTO> searchHotels(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String brand,
             @RequestParam(required = false) String city,
