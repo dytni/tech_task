@@ -5,7 +5,6 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import org.springframework.data.jpa.domain.Specification;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +22,12 @@ public class HotelSpecification {
 
     public static Specification<Hotel> hasCity(String city) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(criteriaBuilder.lower(root.join("address").get("city")), city.toLowerCase());
+                criteriaBuilder.equal(criteriaBuilder.lower(root.get("city")), city.toLowerCase());
     }
 
     public static Specification<Hotel> hasCounty(String county) {
         return (root, query, criteriaBuilder) ->
-                criteriaBuilder.equal(criteriaBuilder.lower(root.join("address").get("county")), county.toLowerCase());
+                criteriaBuilder.equal(criteriaBuilder.lower(root.get("county")), county.toLowerCase());
     }
 
     public static Specification<Hotel> hasAmenities(List<String> amenities) {

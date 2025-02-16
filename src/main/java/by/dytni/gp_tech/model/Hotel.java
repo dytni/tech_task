@@ -18,8 +18,11 @@ public class Hotel {
     private String checkIn;
     private String checkOut;
 
-    @Embedded
-    private Address address;
+    private int houseNumber;
+    private String street;
+    private String city;
+    private String county;
+    private String postCode;
 
     @ElementCollection
     @CollectionTable(name = "hotel_amenities", joinColumns = @JoinColumn(name = "hotel_id"))
