@@ -71,9 +71,9 @@ public class HotelController {
             @ApiResponse(responseCode = "500", description = "Internal server error",
                     content = @Content)
     })
-    public ResponseEntity<HotelDTO> createHotel(@RequestBody Hotel hotel) {
+    public ResponseEntity<HotelShortInfoDTO> createHotel(@RequestBody Hotel hotel) {
         Hotel createdHotel = hotelService.createHotel(hotel);
-        HotelDTO hotelDTO = hotelService.toHotelDTO(createdHotel);
+        HotelShortInfoDTO hotelDTO = hotelService.toHotelShortInfoDTO(createdHotel);
         return ResponseEntity.ok(hotelDTO);
     }
 
