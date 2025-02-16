@@ -74,6 +74,7 @@ public class HotelController {
     public ResponseEntity<HotelShortInfoDTO> createHotel(@RequestBody Hotel hotel) {
         Hotel createdHotel = hotelService.createHotel(hotel);
         HotelShortInfoDTO hotelDTO = hotelService.toHotelShortInfoDTO(createdHotel);
+   
         return ResponseEntity.ok(hotelDTO);
     }
 
